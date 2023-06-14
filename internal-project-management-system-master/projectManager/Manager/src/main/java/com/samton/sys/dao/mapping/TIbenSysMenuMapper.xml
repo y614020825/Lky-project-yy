@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.samton.sys.dao.TIbenSysMenuMapper" >
+  <resultMap id="BaseResultMap" type="com.samton.sys.bean.TIbenSysMenu" >
+    <id column="menu_id" property="menuId" jdbcType="BIGINT" />
+    <result column="menu_name" property="menuName" jdbcType="VARCHAR" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="request_path" property="requestPath" jdbcType="VARCHAR" />
+    <result column="order_num" property="orderNum" jdbcType="INTEGER" />
+    <result column="ico" property="ico" jdbcType="VARCHAR" />
+    <result column="is_last" property="isLast" jdbcType="SMALLINT" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="parent_id" property="parentId" jdbcType="BIGINT" />
+    <result column="create_user_id" property="createUserId" jdbcType="BIGINT" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="modify_user_id" property="modifyUserId" jdbcType="BIGINT" />
+    <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+    <result column="is_deleted" property="isDeleted" jdbcType="SMALLINT" />
+  </resultMap>
+  <resultMap id="BaseResultMap2" type="com.samton.sys.bean.TIbenSysMenu" extends="BaseResultMap">
+    <result column="role_menu_id" property="roleMenuId" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    menu_id, menu_name, url, request_path, order_num, ico, is_last, description, parent_id, 
+    create_user_id, create_date, modify_user_id, modify_date, is_deleted
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from public.t_iben_sys_menu
+    where menu_id = #{menuId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from public.t_iben_sys_menu
+    where menu_id = #{menuId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.samton.sys.bean.TIbenSysMenu" >
+    insert into public.t_iben_sys_menu (menu_id, menu_name, url, 
+      request_path, order_num, ico, 
+      is_last, description, parent_id, 
+      create_user_id, create_date, modify_user_id, 
+      modify_date, is_deleted)
+    values (#{menuId,jdbcType=BIGINT}, #{menuName,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, 
+      #{requestPath,jdbcType=VARCHAR}, #{orderNum,jdbcType=INTEGER}, #{ico,jdbcType=VARCHAR}, 
+      #{isLast,jdbcType=SMALLINT}, #{description,jdbcType=VARCHAR}, #{parentId,jdbcType=BIGINT}, 
+      #{createUserId,jdbcType=BIGINT}, #{createDate,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=BIGINT}, 
+      #{modifyDate,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=SMALLINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.samton.sys.bean.TIbenSysMenu" >
+    insert into public.t_iben_sys_menu
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="menuId != null" >
+        menu_id,
+      </if>
+      <if test="menuName != null" >
+        menu_name,
+      </if>
+      <if test="url != null" >
+        url,
+      </if>
+      <if test="requestPath != null" >
+        request_path,
+      </if>
+      <if test="orderNum != null" >
+        order_num,
+      </if>
+      <if test="ico != null" >
+        ico,
+      </if>
+      <if test="isLast != null" >
+        is_last,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="parentId != null" >
+        parent_id,
+      </if>
+      <if test="createUserId != null" >
+        create_user_id,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="modifyUserId != null" >
+        modify_user_id,
+      </if>
+      <if test="modifyDate != null" >
+        modify_date,
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="menuId != null" >
+        #{menuId,jdbcType=BIGINT},
+      </if>
+      <if test="menuName != null" >
+        #{menuName,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="requestPath != null" >
+        #{requestPath,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNum != null" >
+        #{orderNum,jdbcType=INTEGER},
+      </if>
+      <if test="ico != null" >
+        #{ico,jdbcType=VARCHAR},
+      </if>
+      <if test="isLast != null" >
+        #{isLast,jdbcType=SMALLINT},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null" >
+        #{parentId,jdbcType=BIGINT},
+      </if>
+      <if test="createUserId != null" >
+        #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUserId != null" >
+        #{modifyUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifyDate != null" >
+        #{modifyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null" >
+        #{isDeleted,jdbcType=SMALLINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.samton.sys.bean.TIbenSysMenu" >
+    update public.t_iben_sys_menu
+    <set >
+      <if test="menuName != null" >
+        menu_name = #{menuName,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="requestPath != null" >
+        request_path = #{requestPath,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNum != null" >
+        order_num = #{orderNum,jdbcType=INTEGER},
+      </if>
+      <if test="ico != null" >
+        ico = #{ico,jdbcType=VARCHAR},
+      </if>
+      <if test="isLast != null" >
+        is_last = #{isLast,jdbcType=SMALLINT},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null" >
+        parent_id = #{parentId,jdbcType=BIGINT},
+      </if>
+      <if test="createUserId != null" >
+        create_user_id = #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUserId != null" >
+        modify_user_id = #{modifyUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifyDate != null" >
+        modify_date = #{modifyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted = #{isDeleted,jdbcType=SMALLINT},
+      </if>
+    </set>
+    where menu_id = #{menuId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.samton.sys.bean.TIbenSysMenu" >
+    update public.t_iben_sys_menu
+    set menu_name = #{menuName,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
+      request_path = #{requestPath,jdbcType=VARCHAR},
+      order_num = #{orderNum,jdbcType=INTEGER},
+      ico = #{ico,jdbcType=VARCHAR},
+      is_last = #{isLast,jdbcType=SMALLINT},
+      description = #{description,jdbcType=VARCHAR},
+      parent_id = #{parentId,jdbcType=BIGINT},
+      create_user_id = #{createUserId,jdbcType=BIGINT},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      modify_user_id = #{modifyUserId,jdbcType=BIGINT},
+      modify_date = #{modifyDate,jdbcType=TIMESTAMP},
+      is_deleted = #{isDeleted,jdbcType=SMALLINT}
+    where menu_id = #{menuId,jdbcType=BIGINT}
+  </update>
+  
+  <select id="selectAllMenuByRoleId" resultMap="BaseResultMap">
+	select m.*
+	from t_iben_sys_menu m
+	left join t_iben_sys_role_menu rm on rm.menu_id=m.menu_id and rm.is_deleted=0
+	where m.is_deleted=0
+	and rm.role_id=#{roleId,jdbcType=BIGINT}
+	order by m.parent_id asc, m.order_num asc
+  </select>
+  
+  <select id="selectAllMenu" resultMap="BaseResultMap2">
+	select rm.role_menu_id,m.*
+	from public.t_iben_sys_menu m
+	left join public.t_iben_sys_role_menu rm on rm.menu_id=m.menu_id and rm.is_deleted=0 and role_id=#{roleId,jdbcType=BIGINT}
+	where m.is_deleted=0
+	order by m.parent_id asc, m.order_num asc
+  </select>
+</mapper>

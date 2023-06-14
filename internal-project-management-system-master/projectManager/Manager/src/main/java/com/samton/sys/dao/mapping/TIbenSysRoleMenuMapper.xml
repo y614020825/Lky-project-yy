@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.samton.sys.dao.TIbenSysRoleMenuMapper" >
+  <resultMap id="BaseResultMap" type="com.samton.sys.bean.TIbenSysRoleMenu" >
+    <id column="role_menu_id" property="roleMenuId" jdbcType="BIGINT" />
+    <result column="role_id" property="roleId" jdbcType="BIGINT" />
+    <result column="menu_id" property="menuId" jdbcType="BIGINT" />
+    <result column="create_user_id" property="createUserId" jdbcType="BIGINT" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="modify_user_id" property="modifyUserId" jdbcType="BIGINT" />
+    <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+    <result column="is_deleted" property="isDeleted" jdbcType="SMALLINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    role_menu_id, role_id, menu_id, create_user_id, create_date, modify_user_id, modify_date, 
+    is_deleted
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from public.t_iben_sys_role_menu
+    where role_menu_id = #{roleMenuId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from public.t_iben_sys_role_menu
+    where role_menu_id = #{roleMenuId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.samton.sys.bean.TIbenSysRoleMenu" >
+    insert into public.t_iben_sys_role_menu (role_menu_id, role_id, menu_id, 
+      create_user_id, create_date, modify_user_id, 
+      modify_date, is_deleted)
+    values (#{roleMenuId,jdbcType=BIGINT}, #{roleId,jdbcType=BIGINT}, #{menuId,jdbcType=BIGINT}, 
+      #{createUserId,jdbcType=BIGINT}, #{createDate,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=BIGINT}, 
+      #{modifyDate,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=SMALLINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.samton.sys.bean.TIbenSysRoleMenu" >
+    insert into public.t_iben_sys_role_menu
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="roleMenuId != null" >
+        role_menu_id,
+      </if>
+      <if test="roleId != null" >
+        role_id,
+      </if>
+      <if test="menuId != null" >
+        menu_id,
+      </if>
+      <if test="createUserId != null" >
+        create_user_id,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="modifyUserId != null" >
+        modify_user_id,
+      </if>
+      <if test="modifyDate != null" >
+        modify_date,
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="roleMenuId != null" >
+        #{roleMenuId,jdbcType=BIGINT},
+      </if>
+      <if test="roleId != null" >
+        #{roleId,jdbcType=BIGINT},
+      </if>
+      <if test="menuId != null" >
+        #{menuId,jdbcType=BIGINT},
+      </if>
+      <if test="createUserId != null" >
+        #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUserId != null" >
+        #{modifyUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifyDate != null" >
+        #{modifyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null" >
+        #{isDeleted,jdbcType=SMALLINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.samton.sys.bean.TIbenSysRoleMenu" >
+    update public.t_iben_sys_role_menu
+    <set >
+      <if test="roleId != null" >
+        role_id = #{roleId,jdbcType=BIGINT},
+      </if>
+      <if test="menuId != null" >
+        menu_id = #{menuId,jdbcType=BIGINT},
+      </if>
+      <if test="createUserId != null" >
+        create_user_id = #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUserId != null" >
+        modify_user_id = #{modifyUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifyDate != null" >
+        modify_date = #{modifyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted = #{isDeleted,jdbcType=SMALLINT},
+      </if>
+    </set>
+    where role_menu_id = #{roleMenuId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.samton.sys.bean.TIbenSysRoleMenu" >
+    update public.t_iben_sys_role_menu
+    set role_id = #{roleId,jdbcType=BIGINT},
+      menu_id = #{menuId,jdbcType=BIGINT},
+      create_user_id = #{createUserId,jdbcType=BIGINT},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      modify_user_id = #{modifyUserId,jdbcType=BIGINT},
+      modify_date = #{modifyDate,jdbcType=TIMESTAMP},
+      is_deleted = #{isDeleted,jdbcType=SMALLINT}
+    where role_menu_id = #{roleMenuId,jdbcType=BIGINT}
+  </update>
+  <update id="deleteByRoleIdBesidesMenuId">
+	update public.t_iben_sys_role_menu set is_deleted = 1
+    where role_id = #{roleId,jdbcType=BIGINT}
+    and is_deleted = 0
+   	<if test="menuIds != null and menuIds.size() != 0">
+   		and menu_id not in
+		<foreach collection="menuIds" index="index" item="item" open="(" separator="," close=")">  
+	       #{item}   
+	    </foreach>
+   	</if>
+  </update>
+  <select id="getRoleMenuByRoleId" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_iben_sys_role_menu 
+	where role_id = #{roleId,jdbcType=BIGINT}
+	and is_deleted = 0
+  </select>
+  <insert id="addForBat">
+  	insert into public.t_iben_sys_role_menu
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+    	role_id, menu_id,
+      	<if test="record.createUserId != null" >
+        	create_user_id,
+      	</if>
+      	<if test="record.createDate != null" >
+        	create_date,
+      	</if>
+      	<if test="record.modifyUserId != null" >
+        	modify_user_id,
+      	</if>
+      	<if test="record.modifyDate != null" >
+        	modify_date,
+      	</if>
+    </trim>
+    values
+    <if test="menuIds != null and menuIds.length > 0">
+    	<foreach collection="menuIds" item="value" index="key" separator=",">
+	       <trim prefix="(" suffix=")" suffixOverrides="," >
+	       	  	#{record.roleId,jdbcType=BIGINT}, #{value},
+		      	<if test="record.createUserId != null" >
+		        	#{record.createUserId,jdbcType=BIGINT},
+		      	</if>
+		      	<if test="record.createDate != null" >
+		        	#{record.createDate,jdbcType=TIMESTAMP},
+		      	</if>
+		      	<if test="record.modifyUserId != null" >
+		        	#{record.modifyUserId,jdbcType=BIGINT},
+		      	</if>
+		      	<if test="record.modifyDate != null" >
+		        	#{record.modifyDate,jdbcType=TIMESTAMP},
+		      	</if>
+		    </trim>
+	    </foreach>
+    </if>
+  </insert>
+  <update id="deleteByRoleId">
+	update public.t_iben_sys_role_menu set is_deleted = 1
+    where role_id = #{roleId,jdbcType=BIGINT}
+    and is_deleted = 0
+  </update>
+</mapper>

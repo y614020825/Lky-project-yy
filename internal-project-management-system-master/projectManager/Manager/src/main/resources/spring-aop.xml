@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.springframework.org/schema/beans  
+                        		   http://www.springframework.org/schema/beans/spring-beans.xsd  
+                         		   http://www.springframework.org/schema/aop 
+                        		   http://www.springframework.org/schema/aop/spring-aop.xsd">
+                        
+    <!--spring aop配置 -->
+    <aop:aspectj-autoproxy proxy-target-class="true" />
+    
+    <!-- access日志记录 -->
+    <aop:config expose-proxy="true">
+        <aop:pointcut id="ctrlPt" expression="execution(* com.samton.*.controller..*.*(..))" />
+        <aop:aspect  ref="accessLog" order="2" >
+           <aop:around pointcut-ref="ctrlPt" method="recordLog"/>
+        </aop:aspect>
+    </aop:config>
+    
+    <!-- token处理 -->
+    <aop:config expose-proxy="true">
+        <aop:pointcut id="tokenPt" expression="execution(* com.samton.*.controller..*.*(..))" />
+        <aop:aspect  ref="tokenAop" order="2" >
+           <aop:around pointcut-ref="tokenPt" method="dealToken"/>
+        </aop:aspect>
+    </aop:config> 
+    
+</beans>

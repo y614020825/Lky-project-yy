@@ -1,0 +1,462 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.samton.project.dao.TIbenProjectMapper" >
+  <resultMap id="BaseResultMap" type="com.samton.project.bean.TIbenProject" >
+    <id column="project_id" property="projectId" jdbcType="BIGINT" />
+    <result column="project_name" property="projectName" jdbcType="VARCHAR" />
+    <result column="project_type" property="projectType" jdbcType="SMALLINT" />
+    <result column="project_progress" property="projectProgress" jdbcType="DOUBLE" />
+    <result column="project_deliver_date" property="projectDeliverDate" jdbcType="TIMESTAMP" />
+    <result column="commercial_personnel" property="commercialPersonnel" jdbcType="VARCHAR" />
+    <result column="robot_category" property="robotCategory" jdbcType="ARRAY" typeHandler="com.samton.util.ArrayTypeHandler"/>
+    <result column="project_stage" property="projectStage" jdbcType="SMALLINT" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="pay_date" property="payDate" jdbcType="TIMESTAMP" />
+    <result column="robot_amount" property="robotAmount" jdbcType="INTEGER" />
+    <result column="project_status" property="projectStatus" jdbcType="SMALLINT" />
+    <result column="lead_time" property="leadTime" jdbcType="TIMESTAMP" />
+    <result column="terminal_name" property="terminalName" jdbcType="VARCHAR" />
+    <result column="terminal_industry" property="terminalIndustry" jdbcType="VARCHAR" />
+    <result column="terminal_address" property="terminalAddress" jdbcType="VARCHAR" />
+    <result column="middleman_name" property="middlemanName" jdbcType="VARCHAR" />
+    <result column="middleman_industry" property="middlemanIndustry" jdbcType="VARCHAR" />
+    <result column="middleman_address" property="middlemanAddress" jdbcType="VARCHAR" />
+    <result column="communicate_person" property="communicatePerson" jdbcType="VARCHAR" />
+    <result column="communicate_person_phonenumber" property="communicatePersonPhonenumber" jdbcType="VARCHAR" />
+    <result column="communicate_role" property="communicateRole" jdbcType="VARCHAR" />
+    <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+    <result column="is_deleted" property="isDeleted" jdbcType="SMALLINT" />
+    <result column="create_user_name" property="createUserName" jdbcType="VARCHAR" />
+    <result column="create_user_id" property="createUserId" jdbcType="BIGINT" />
+    <result column="modify_user_name" property="modifyUserName" jdbcType="VARCHAR" />
+    <result column="modify_user_id" property="modifyUserId" jdbcType="BIGINT" />
+    <result column="custom_type" property="customType" jdbcType="ARRAY" typeHandler="com.samton.util.ArrayTypeHandler"/>
+    <result column="contract_time" property="contractTime" jdbcType="DOUBLE" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    project_id, project_name, project_type, project_progress, project_deliver_date, commercial_personnel, 
+    robot_category, project_stage, create_date, pay_date, robot_amount, project_status, 
+    lead_time, terminal_name, terminal_industry, terminal_address, middleman_name, middleman_industry, 
+    middleman_address, communicate_person, communicate_person_phonenumber, communicate_role, 
+    modify_date, is_deleted, create_user_name, create_user_id, modify_user_name, modify_user_id, 
+    custom_type, contract_time
+  </sql>
+<!-- List<JqxParamBean> queryPageList(JqxParamBean paramBean, RowBounds rowBounds);-->
+  <select id="queryPageList" parameterType="com.samton.base.bean.JqxParamBean" resultMap="BaseResultMap">
+    select p.*, u.user_id
+    from public.t_iben_project p
+    left join public.t_iben_project_staffs u on p.project_id = u.project_id
+    where p.is_deleted = 0 and u.is_deleted = 0
+        <if test="vo != null">
+            <if test="vo.robotCategory!=null">
+              <![CDATA[
+                and #{vo.robotCategory,jdbcType=ARRAY,typeHandler=com.samton.util.ArrayTypeHandler} <@ p.robot_category
+              ]]>
+            </if>
+            <if test="vo.customType!=null">
+               <![CDATA[
+                and #{vo.customType,jdbcType=ARRAY,typeHandler=com.samton.util.ArrayTypeHandler} <@ p.custom_type
+                ]]>
+            </if>
+            <if test="vo.projectType != null">
+                and p.project_type =#{vo.projectType,jdbcType=SMALLINT}
+            </if>
+            <if test="vo.projectStage != null">
+                and p.project_stage =#{vo.projectStage,jdbcType=SMALLINT}
+            </if>
+            <if test="vo.projectStatus != null">
+                and p.project_status =#{vo.projectStatus,jdbcType=SMALLINT}
+            </if>
+            <if test="vo.leadingStartTime != null">
+              <![CDATA[
+	    		and p.lead_time >= #{vo.leadingStartTime,jdbcType=DATE}
+	    	  ]]>
+            </if>
+            <if test="vo.leadingEndTime != null">
+              <![CDATA[
+	    		and p.lead_time <= #{vo.leadingEndTime,jdbcType=DATE}
+	    	    ]]>
+            </if>
+            <if test="vo.creatingStartTime != null">
+              <![CDATA[
+                and p.create_time >= #{vo.creatingStartTime,jdbcType=DATA}
+              ]]>
+           </if>
+            <if test="vo.creatingEndTime != null">
+              <![CDATA[
+                and p.create_time <= #{vo.creatingEndTime,jdbcType=DATA}
+              ]]>
+            </if>
+            <if test="vo.projectName != null and vo.projectName != '' ">
+                and p.project_name like CONCAT('%'{vo.projectName}'%')
+            </if>
+            <if test="vo.createUserId != null ">
+                and (#{vo.createUserId,jdbcType=BIGINT} = any (u.user_id) or p.create_user_id=#{vo.createUserId,jdbcType=BIGINT})
+            </if>
+            <if test="vo.pointUser != null ">
+                and (#{vo.pointUser,jdbcType=BIGINT} =any(u.user_id)
+            </if>
+            </if>
+    order by p.modify_date desc
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from public.t_iben_project
+    where project_id = #{projectId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from public.t_iben_project
+    where project_id = #{projectId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.samton.project.bean.TIbenProject" >
+    insert into public.t_iben_project (project_id, project_name, project_type, 
+      project_progress, project_deliver_date, commercial_personnel, 
+      robot_category, project_stage, create_date, 
+      pay_date, robot_amount, project_status, 
+      lead_time, terminal_name, terminal_industry, 
+      terminal_address, middleman_name, middleman_industry, 
+      middleman_address, communicate_person, communicate_person_phonenumber, 
+      communicate_role, modify_date, is_deleted, 
+      create_user_name, create_user_id, modify_user_name, 
+      modify_user_id, custom_type, contract_time
+      )
+    values (#{projectId,jdbcType=BIGINT}, #{projectName,jdbcType=VARCHAR}, #{projectType,jdbcType=SMALLINT},
+      #{projectProgress,jdbcType=DOUBLE}, #{projectDeliverDate,jdbcType=TIMESTAMP}, #{commercialPersonnel,jdbcType=VARCHAR}, 
+      #{robotCategory,jdbcType=ARRAY,typeHandler=com.samton.util.ArrayTypeHandler}, #{projectStage,jdbcType=SMALLINT}, #{createDate,jdbcType=TIMESTAMP},
+      #{payDate,jdbcType=TIMESTAMP}, #{robotAmount,jdbcType=INTEGER}, #{projectStatus,jdbcType=SMALLINT},
+      #{leadTime,jdbcType=TIMESTAMP}, #{terminalName,jdbcType=VARCHAR}, #{terminalIndustry,jdbcType=VARCHAR}, 
+      #{terminalAddress,jdbcType=VARCHAR}, #{middlemanName,jdbcType=VARCHAR}, #{middlemanIndustry,jdbcType=VARCHAR}, 
+      #{middlemanAddress,jdbcType=VARCHAR}, #{communicatePerson,jdbcType=VARCHAR}, #{communicatePersonPhonenumber,jdbcType=VARCHAR}, 
+      #{communicateRole,jdbcType=VARCHAR}, #{modifyDate,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=SMALLINT},
+      #{createUserName,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, #{modifyUserName,jdbcType=VARCHAR}, 
+      #{modifyUserId,jdbcType=BIGINT}, #{customType,jdbcType=ARRAY,typeHandler=com.samton.util.ArrayTypeHandler}, #{contractTime,jdbcType=DOUBLE}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.samton.project.bean.TIbenProject" >
+    insert into public.t_iben_project
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="projectId != null" >
+        project_id,
+      </if>
+      <if test="projectName != null" >
+        project_name,
+      </if>
+      <if test="projectType != null" >
+        project_type,
+      </if>
+      <if test="projectProgress != null" >
+        project_progress,
+      </if>
+      <if test="projectDeliverDate != null" >
+        project_deliver_date,
+      </if>
+      <if test="commercialPersonnel != null" >
+        commercial_personnel,
+      </if>
+      <if test="robotCategory != null" >
+        robot_category,
+      </if>
+      <if test="projectStage != null" >
+        project_stage,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="payDate != null" >
+        pay_date,
+      </if>
+      <if test="robotAmount != null" >
+        robot_amount,
+      </if>
+      <if test="projectStatus != null" >
+        project_status,
+      </if>
+      <if test="leadTime != null" >
+        lead_time,
+      </if>
+      <if test="terminalName != null" >
+        terminal_name,
+      </if>
+      <if test="terminalIndustry != null" >
+        terminal_industry,
+      </if>
+      <if test="terminalAddress != null" >
+        terminal_address,
+      </if>
+      <if test="middlemanName != null" >
+        middleman_name,
+      </if>
+      <if test="middlemanIndustry != null" >
+        middleman_industry,
+      </if>
+      <if test="middlemanAddress != null" >
+        middleman_address,
+      </if>
+      <if test="communicatePerson != null" >
+        communicate_person,
+      </if>
+      <if test="communicatePersonPhonenumber != null" >
+        communicate_person_phonenumber,
+      </if>
+      <if test="communicateRole != null" >
+        communicate_role,
+      </if>
+      <if test="modifyDate != null" >
+        modify_date,
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted,
+      </if>
+      <if test="createUserName != null" >
+        create_user_name,
+      </if>
+      <if test="createUserId != null" >
+        create_user_id,
+      </if>
+      <if test="modifyUserName != null" >
+        modify_user_name,
+      </if>
+      <if test="modifyUserId != null" >
+        modify_user_id,
+      </if>
+      <if test="customType != null" >
+        custom_type,
+      </if>
+      <if test="contractTime != null" >
+        contract_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="projectId != null" >
+        #{projectId,jdbcType=BIGINT},
+      </if>
+      <if test="projectName != null" >
+        #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="projectType != null" >
+        #{projectType,jdbcType=SMALLINT},
+      </if>
+      <if test="projectProgress != null" >
+        #{projectProgress,jdbcType=DOUBLE},
+      </if>
+      <if test="projectDeliverDate != null" >
+        #{projectDeliverDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="commercialPersonnel != null" >
+        #{commercialPersonnel,jdbcType=VARCHAR},
+      </if>
+      <if test="robotCategory != null" >
+        #{robotCategory,jdbcType=ARRAY,typeHandler=com.samton.util.ArrayTypeHandler},
+      </if>
+      <if test="projectStage != null" >
+        #{projectStage,jdbcType=SMALLINT},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payDate != null" >
+        #{payDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="robotAmount != null" >
+        #{robotAmount,jdbcType=INTEGER},
+      </if>
+      <if test="projectStatus != null" >
+        #{projectStatus,jdbcType=SMALLINT},
+      </if>
+      <if test="leadTime != null" >
+        #{leadTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="terminalName != null" >
+        #{terminalName,jdbcType=VARCHAR},
+      </if>
+      <if test="terminalIndustry != null" >
+        #{terminalIndustry,jdbcType=VARCHAR},
+      </if>
+      <if test="terminalAddress != null" >
+        #{terminalAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="middlemanName != null" >
+        #{middlemanName,jdbcType=VARCHAR},
+      </if>
+      <if test="middlemanIndustry != null" >
+        #{middlemanIndustry,jdbcType=VARCHAR},
+      </if>
+      <if test="middlemanAddress != null" >
+        #{middlemanAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="communicatePerson != null" >
+        #{communicatePerson,jdbcType=VARCHAR},
+      </if>
+      <if test="communicatePersonPhonenumber != null" >
+        #{communicatePersonPhonenumber,jdbcType=VARCHAR},
+      </if>
+      <if test="communicateRole != null" >
+        #{communicateRole,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyDate != null" >
+        #{modifyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null" >
+        #{isDeleted,jdbcType=SMALLINT},
+      </if>
+      <if test="createUserName != null" >
+        #{createUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null" >
+        #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifyUserName != null" >
+        #{modifyUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyUserId != null" >
+        #{modifyUserId,jdbcType=BIGINT},
+      </if>
+      <if test="customType != null" >
+        #{customType,jdbcType=ARRAY,typeHandler=com.samton.util.ArrayTypeHandler},
+      </if>
+      <if test="contractTime != null" >
+        #{contractTime,jdbcType=DOUBLE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.samton.project.bean.TIbenProject" >
+    update public.t_iben_project
+    <set >
+      <if test="projectName != null" >
+        project_name = #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="projectType != null" >
+        project_type = #{projectType,jdbcType=SMALLINT},
+      </if>
+      <if test="projectProgress != null" >
+        project_progress = #{projectProgress,jdbcType=DOUBLE},
+      </if>
+      <if test="projectDeliverDate != null" >
+        project_deliver_date = #{projectDeliverDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="commercialPersonnel != null" >
+        commercial_personnel = #{commercialPersonnel,jdbcType=VARCHAR},
+      </if>
+      <if test="robotCategory != null" >
+        robot_category = #{robotCategory,jdbcType=ARRAY,typeHandler=com.samton.util.ArrayTypeHandler},
+      </if>
+      <if test="projectStage != null" >
+        project_stage = #{projectStage,jdbcType=SMALLINT},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payDate != null" >
+        pay_date = #{payDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="robotAmount != null" >
+        robot_amount = #{robotAmount,jdbcType=INTEGER},
+      </if>
+      <if test="projectStatus != null" >
+        project_status = #{projectStatus,jdbcType=SMALLINT},
+      </if>
+      <if test="leadTime != null" >
+        lead_time = #{leadTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="terminalName != null" >
+        terminal_name = #{terminalName,jdbcType=VARCHAR},
+      </if>
+      <if test="terminalIndustry != null" >
+        terminal_industry = #{terminalIndustry,jdbcType=VARCHAR},
+      </if>
+      <if test="terminalAddress != null" >
+        terminal_address = #{terminalAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="middlemanName != null" >
+        middleman_name = #{middlemanName,jdbcType=VARCHAR},
+      </if>
+      <if test="middlemanIndustry != null" >
+        middleman_industry = #{middlemanIndustry,jdbcType=VARCHAR},
+      </if>
+      <if test="middlemanAddress != null" >
+        middleman_address = #{middlemanAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="communicatePerson != null" >
+        communicate_person = #{communicatePerson,jdbcType=VARCHAR},
+      </if>
+      <if test="communicatePersonPhonenumber != null" >
+        communicate_person_phonenumber = #{communicatePersonPhonenumber,jdbcType=VARCHAR},
+      </if>
+      <if test="communicateRole != null" >
+        communicate_role = #{communicateRole,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyDate != null" >
+        modify_date = #{modifyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted = #{isDeleted,jdbcType=SMALLINT},
+      </if>
+      <if test="createUserName != null" >
+        create_user_name = #{createUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null" >
+        create_user_id = #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifyUserName != null" >
+        modify_user_name = #{modifyUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyUserId != null" >
+        modify_user_id = #{modifyUserId,jdbcType=BIGINT},
+      </if>
+      <if test="customType != null" >
+        custom_type = #{customType,jdbcType=ARRAY,typeHandler=com.samton.util.ArrayTypeHandler},
+      </if>
+      <if test="contractTime != null" >
+        contract_time = #{contractTime,jdbcType=DOUBLE},
+      </if>
+    </set>
+    where project_id = #{projectId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.samton.project.bean.TIbenProject" >
+    update public.t_iben_project
+    set project_name = #{projectName,jdbcType=VARCHAR},
+      project_type = #{projectType,jdbcType=SMALLINT},
+      project_progress = #{projectProgress,jdbcType=DOUBLE},
+      project_deliver_date = #{projectDeliverDate,jdbcType=TIMESTAMP},
+      commercial_personnel = #{commercialPersonnel,jdbcType=VARCHAR},
+      robot_category = #{robotCategory,jdbcType=ARRAY,typeHandler=com.samton.util.ArrayTypeHandler},
+      project_stage = #{projectStage,jdbcType=SMALLINT},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      pay_date = #{payDate,jdbcType=TIMESTAMP},
+      robot_amount = #{robotAmount,jdbcType=INTEGER},
+      project_status = #{projectStatus,jdbcType=SMALLINT},
+      lead_time = #{leadTime,jdbcType=TIMESTAMP},
+      terminal_name = #{terminalName,jdbcType=VARCHAR},
+      terminal_industry = #{terminalIndustry,jdbcType=VARCHAR},
+      terminal_address = #{terminalAddress,jdbcType=VARCHAR},
+      middleman_name = #{middlemanName,jdbcType=VARCHAR},
+      middleman_industry = #{middlemanIndustry,jdbcType=VARCHAR},
+      middleman_address = #{middlemanAddress,jdbcType=VARCHAR},
+      communicate_person = #{communicatePerson,jdbcType=VARCHAR},
+      communicate_person_phonenumber = #{communicatePersonPhonenumber,jdbcType=VARCHAR},
+      communicate_role = #{communicateRole,jdbcType=VARCHAR},
+      modify_date = #{modifyDate,jdbcType=TIMESTAMP},
+      is_deleted = #{isDeleted,jdbcType=SMALLINT},
+      create_user_name = #{createUserName,jdbcType=VARCHAR},
+      create_user_id = #{createUserId,jdbcType=BIGINT},
+      modify_user_name = #{modifyUserName,jdbcType=VARCHAR},
+      modify_user_id = #{modifyUserId,jdbcType=BIGINT},
+      custom_type = #{customType,jdbcType=ARRAY,typeHandler=com.samton.util.ArrayTypeHandler},
+      contract_time = #{contractTime,jdbcType=DOUBLE}
+    where project_id = #{projectId,jdbcType=BIGINT}
+  </update>
+<!--  List<TIbenProject> querySameList(@Param("projectName")String projectName);-->
+  <select id="querySameList" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select
+    <include refid="Base_Column_List" />
+    from public.t_iben_project
+    where is_deleted = 0
+    and project_name = #{projectName,jdbcType=VARCHAR}
+  </select>
+<!--  int deleteByProjectId(Long projectId);-->
+  <update id="deleteByProjectId" parameterType="java.lang.Long">
+    update public.t_iben_project set is_deleted = 1
+    where is_deleted = 0 and project_id = #{projectId,jdbcType=BIGINT}
+  </update>
+</mapper>

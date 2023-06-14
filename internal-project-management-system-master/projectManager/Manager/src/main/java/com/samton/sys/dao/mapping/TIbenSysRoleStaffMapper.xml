@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.samton.sys.dao.TIbenSysRoleStaffMapper">
+
+
+    <resultMap id="BaseResultMap" type="com.samton.sys.bean.TIbenSysStaff">
+        <id column="staff_id" property="staffId" jdbcType="BIGINT"/>
+        <result column="project_id" property="projectId" jdbcType="BIGINT"/>
+        <result column="role_id" property="roleId" jdbcType="BIGINT"/>
+        <result column="user_id" property="userId" jdbcType="ARRAY" typeHandler="com.samton.util.ArrayTypeHandler"/>
+        <result column="create_user_id" property="createUserId" jdbcType="BIGINT" />
+        <result column="create_user_name" property="createUserName" jdbcType="VARCHAR" />
+        <result column="modify_user_id" property="modifyUserId" jdbcType="BIGINT" />
+        <result column="modify_user_name" property="modifyUserName" jdbcType="VARCHAR" />
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+        <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+        <result column="is_deleted" property="isDeleted" jdbcType="SMALLINT" />
+    </resultMap>
+    <!--    int insertSelective(TIbenSysStaff staffIds);-->
+    <insert id="insertSelective" parameterType="com.samton.sys.bean.TIbenSysStaff">
+        insert into t_iben_project_staffs (project_id,role_id,user_id,create_user_id,
+                                           create_user_name,modify_user_id,modify_user_name,
+                                           create_date,modify_date)
+        values
+        <foreach collection="staffs" item="staff" separator=",">
+                (#{staff.projectId,jdbcType=BIGINT},
+                 #{staff.roleId,jdbcType=BIGINT},
+                 #{staff.userId,jdbcType=ARRAY,typeHandler=com.samton.util.ArrayTypeHandler},#{staffs[0].createUserId,jdbcType=BIGINT},
+            #{staffs[0].createUserName,jdbcType=VARCHAR}, #{staffs[0].modifyUserId,jdbcType=BIGINT}, #{staffs[0].modifyUserName,jdbcType=VARCHAR},
+            #{staffs[0].createDate,jdbcType=TIMESTAMP}, #{staffs[0].modifyDate,jdbcType=TIMESTAMP})
+        </foreach>
+    </insert>
+<!--    TIbenSysStaff selectByPrimaryKey(Long staffId);-->
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultType="com.samton.sys.bean.TIbenSysStaff">
+        select * from t_iben_project_staffs
+            where
+    </select>
+<!--    int deleteByProjectId(Long projectId);-->
+    <update id="deleteByProjectId" >
+        update public.t_iben_project_staffs set is_deleted = 1
+        where is_deleted = 0
+        and project_id = #{projectId,jdbcType=BIGINT}
+    </update>
+<!--    List<TIbenSysStaff> queryList(@Param("projectId")Long projectId);-->
+    <select id="queryList" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select * from public.t_iben_project_staffs
+            where is_deleted = 0
+            and project_id =#{projectId,jdbcType=BIGINT}
+            order by role_id
+    </select>
+</mapper>

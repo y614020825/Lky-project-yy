@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.samton.sys.dao.TIbenSysUserMapper" >
+  <resultMap id="BaseResultMap" type="com.samton.sys.bean.TIbenSysUser" >
+    <id column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="login_account" property="loginAccount" jdbcType="VARCHAR" />
+    <result column="passwd" property="passwd" jdbcType="VARCHAR" />
+    <result column="real_passwd" property="realPasswd" jdbcType="VARCHAR" />
+    <result column="full_name" property="fullName" jdbcType="VARCHAR" />
+    <result column="role_id" property="roleId" jdbcType="BIGINT" />
+    <result column="create_user_id" property="createUserId" jdbcType="BIGINT" />
+    <result column="create_user_name" property="createUserName" jdbcType="VARCHAR" />
+    <result column="modify_user_id" property="modifyUserId" jdbcType="BIGINT" />
+    <result column="modify_user_name" property="modifyUserName" jdbcType="VARCHAR" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+    <result column="is_deleted" property="isDeleted" jdbcType="SMALLINT" />
+  </resultMap>
+  <resultMap id="BaseResultMap2" type="com.samton.sys.bean.TIbenSysUser" extends="BaseResultMap">
+    <result column="role_name" property="roleName" jdbcType="VARCHAR" />
+    <result column="data_auth" property="dataAuth" jdbcType="SMALLINT"/>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    user_id, login_account, passwd, real_passwd, full_name, role_id,
+        create_user_id, create_user_name, modify_user_id, modify_user_name, create_date,
+    modify_date, is_deleted
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap2" parameterType="java.lang.Long" >
+    select public.t_iben_sys_user.*
+    from public.t_iben_sys_user
+    where user_id = #{userId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from public.t_iben_sys_user
+    where user_id = #{userId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.samton.sys.bean.TIbenSysUser" >
+    insert into public.t_iben_sys_user (user_id, login_account, passwd, 
+      real_passwd, full_name, role_id, 
+      dept_id, create_user_id, create_user_name, modify_user_id,
+      modify_user_name, create_date, modify_date, 
+      is_deleted)
+    values (#{userId,jdbcType=BIGINT}, #{loginAccount,jdbcType=VARCHAR}, #{passwd,jdbcType=VARCHAR}, 
+      #{realPasswd,jdbcType=VARCHAR}, #{fullName,jdbcType=VARCHAR}, #{roleId,jdbcType=BIGINT}, 
+      #{deptId,jdbcType=BIGINT},#{createUserId,jdbcType=BIGINT}, #{createUserName,jdbcType=VARCHAR}, #{modifyUserId,jdbcType=BIGINT},
+      #{modifyUserName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{modifyDate,jdbcType=TIMESTAMP}, 
+      #{isDeleted,jdbcType=SMALLINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.samton.sys.bean.TIbenSysUser" useGeneratedKeys="true"  keyProperty="userId" >
+    insert into public.t_iben_sys_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="loginAccount != null" >
+        login_account,
+      </if>
+      <if test="passwd != null" >
+        passwd,
+      </if>
+      <if test="realPasswd != null" >
+        real_passwd,
+      </if>
+      <if test="fullName != null" >
+        full_name,
+      </if>
+      <if test="roleId != null" >
+        role_id,
+      </if>
+
+      <if test="createUserId != null" >
+        create_user_id,
+      </if>
+      <if test="createUserName != null" >
+        create_user_name,
+      </if>
+      <if test="modifyUserId != null" >
+        modify_user_id,
+      </if>
+      <if test="modifyUserName != null" >
+        modify_user_name,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="modifyDate != null" >
+        modify_date,
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="loginAccount != null" >
+        #{loginAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="passwd != null" >
+        #{passwd,jdbcType=VARCHAR},
+      </if>
+      <if test="realPasswd != null" >
+        #{realPasswd,jdbcType=VARCHAR},
+      </if>
+      <if test="fullName != null" >
+        #{fullName,jdbcType=VARCHAR},
+      </if>
+      <if test="roleId != null" >
+        #{roleId,jdbcType=BIGINT},
+      </if>
+      <if test="createUserId != null" >
+        #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createUserName != null" >
+        #{createUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyUserId != null" >
+        #{modifyUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifyUserName != null" >
+        #{modifyUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyDate != null" >
+        #{modifyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null" >
+        #{isDeleted,jdbcType=SMALLINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.samton.sys.bean.TIbenSysUser" >
+    update public.t_iben_sys_user
+    <set >
+      <if test="loginAccount != null" >
+        login_account = #{loginAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="passwd != null" >
+        passwd = #{passwd,jdbcType=VARCHAR},
+      </if>
+      <if test="realPasswd != null" >
+        real_passwd = #{realPasswd,jdbcType=VARCHAR},
+      </if>
+      <if test="fullName != null" >
+        full_name = #{fullName,jdbcType=VARCHAR},
+      </if>
+      <if test="roleId != null" >
+        role_id = #{roleId,jdbcType=BIGINT},
+      </if>
+
+      <if test="createUserId != null" >
+        create_user_id = #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="createUserName != null" >
+        create_user_name = #{createUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyUserId != null" >
+        modify_user_id = #{modifyUserId,jdbcType=BIGINT},
+      </if>
+      <if test="modifyUserName != null" >
+        modify_user_name = #{modifyUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyDate != null" >
+        modify_date = #{modifyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted = #{isDeleted,jdbcType=SMALLINT},
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.samton.sys.bean.TIbenSysUser" >
+    update public.t_iben_sys_user
+    set login_account = #{loginAccount,jdbcType=VARCHAR},
+      passwd = #{passwd,jdbcType=VARCHAR},
+      real_passwd = #{realPasswd,jdbcType=VARCHAR},
+      full_name = #{fullName,jdbcType=VARCHAR},
+      role_id = #{roleId,jdbcType=BIGINT},
+      dept_id = #{deptId,jdbcType=BIGINT},
+      create_user_id = #{createUserId,jdbcType=BIGINT},
+      create_user_name = #{createUserName,jdbcType=VARCHAR},
+      modify_user_id = #{modifyUserId,jdbcType=BIGINT},
+      modify_user_name = #{modifyUserName,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      modify_date = #{modifyDate,jdbcType=TIMESTAMP},
+      is_deleted = #{isDeleted,jdbcType=SMALLINT}
+    where user_id = #{userId,jdbcType=BIGINT}
+  </update>
+  <select id="getByLoginAccount" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from public.t_iben_sys_user
+    where login_account = #{loginAccount,jdbcType=VARCHAR}
+    and is_deleted = 0
+    limit 1
+  </select>
+  <select id="getByLoginAccountAndPasswd" resultMap="BaseResultMap2" >
+    select u.*, r.role_name, r.data_auth
+    from public.t_iben_sys_user u
+    left join public.t_iben_sys_role r on r.role_id = u.role_id
+    where u.login_account = #{loginAccount,jdbcType=VARCHAR}
+    and u.passwd = #{passwd,jdbcType=VARCHAR}
+    and u.is_deleted = 0
+    limit 1
+  </select>
+  <select id="queryList" resultMap="BaseResultMap" parameterType="com.samton.sys.bean.TIbenSysUser" >
+    select 
+    <include refid="Base_Column_List" />
+    from public.t_iben_sys_user
+    where is_deleted = 0
+    <if test="roleId != null">
+   		and role_id = #{roleId,jdbcType=BIGINT}
+   	</if>
+    <if test="accurateLoginAccount != null and accurateLoginAccount != ''">
+    	and login_account = #{accurateLoginAccount,jdbcType=VARCHAR}
+    </if>
+    <if test="loginAccount != null and loginAccount != ''">
+    	and login_account like CONCAT('%', #{loginAccount}, '%')
+    </if>
+    <if test="fullName != null and fullName != ''">
+    	and full_name like CONCAT('%', #{fullName}, '%')
+    </if>
+    order by create_date desc
+  </select>
+  <select id="queryPageList" parameterType="com.samton.base.bean.JqxParamBean" resultMap="BaseResultMap2">
+  	select u.*,r.role_name
+    from public.t_iben_sys_user u
+	left join public.t_iben_sys_role r on r.role_id = u.role_id
+    where u.is_deleted = 0
+    <if test="vo != null">
+	    <if test="vo.roleId != null">
+	   		and u.role_id = #{vo.roleId,jdbcType=BIGINT}
+	   	</if>
+	    <if test="vo.loginAccount != null and vo.loginAccount != ''">
+	    	and u.login_account like CONCAT('%', #{vo.loginAccount}, '%')
+	    </if>
+	    <if test="vo.fullName != null and vo.fullName != ''">
+	    	and u.full_name like CONCAT('%', #{vo.fullName}, '%')
+	    </if>
+    </if>
+    order by u.modify_date desc
+  </select>
+  <update id="deleteByUserId">
+	update public.t_iben_sys_user set is_deleted = 1
+    where is_deleted = 0
+    and user_id = #{userId,jdbcType=BIGINT}
+  </update>
+  <update id="deleteByDeptIds">
+	update public.t_iben_sys_user set is_deleted = 1
+    where is_deleted = 0
+    <choose>
+    	<when test="deptIds != null and deptIds.size() >= 0">
+	   		and dept_id in
+			<foreach close=")" collection="deptIds" index="index" item="item" open="(" separator=",">  
+		       #{item}
+		    </foreach>
+    	</when>
+    	<otherwise>
+    		and false
+    	</otherwise>
+    </choose>
+  </update>
+
+</mapper>
